@@ -63,7 +63,7 @@ class AppDrawer extends StatelessWidget {
             title: Text('Task'),
             trailing: Consumer<TasksProvider>(
                 builder: (context, provider, ch) =>
-                    Text(provider.finishedTasks)),
+                    Text(provider.finishedTasksCounter)),
           ),
           Consumer<ThemeProvider>(
             builder: (context, themeProvider, ch) => ExpansionTile(

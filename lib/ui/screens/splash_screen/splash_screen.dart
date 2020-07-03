@@ -12,17 +12,14 @@ class SplashScreen extends StatelessWidget {
 
     Future.delayed(Duration(seconds: 2), () async {
       final authProvider = context.read<AuthProvider>();
-      // try to auto sign in
+      // try to auto login
       final currentUser = await authProvider.tryAutoLogIn();
+      // if user is exist
       if (currentUser != null) {
-        Navigator.of(context).pushReplacementNamed(
-          TasksScreenRoute,
-          arguments: currentUser,
-        );
+        Navigator.of(context)
+            .pushReplacementNamed(TasksScreenRoute, arguments: currentUser);
       } else {
-        Navigator.of(context).pushReplacementNamed(
-          LoginScreenRoute,
-        );
+        Navigator.of(context).pushReplacementNamed(LoginScreenRoute);
       }
     });
 

@@ -26,6 +26,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     initializeData(widget.oldTask);
   }
 
+  // Initialize task date and time.
   void initializeData(Task oldTask) {
     if (oldTask == null) {
       selectedDate = DateTime.now();
@@ -109,6 +110,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       elevation: 0.0,
       child: Text('Save'),
       onPressed: () async {
+        // If task field is empty show error.
         if (_taskController.text.isEmpty) {
           errorMessage = 'Task field is empty!';
           setState(() {
@@ -116,6 +118,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           });
           return;
         }
+
+        // Add or edit task callback
         widget.addOrEditTask(
           addedTask: Task(
             taskTitle: _taskController.text,
@@ -130,6 +134,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     );
   }
 
+  // Pick date.
   void _datePicker() {
     FocusScope.of(context).requestFocus(FocusNode());
     showDatePicker(
@@ -141,13 +146,13 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       if (date == null) {
         return;
       }
-      print(date);
       setState(() {
         selectedDate = date;
       });
     });
   }
 
+  // Pick time.
   void _timePicker() {
     FocusScope.of(context).requestFocus(FocusNode());
     showTimePicker(
@@ -157,7 +162,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       if (time == null) {
         return;
       }
-      print(time.hour);
       setState(() {
         selectedTime = time;
       });

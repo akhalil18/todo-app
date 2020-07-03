@@ -10,8 +10,10 @@ class ThemeProvider extends ChangeNotifier {
   var key = 'darkTheme';
   bool isDark = false;
 
+  /// App theme.
   ThemeData get theme => _themeData ?? lightTheme;
 
+// Fetch stored theme bool from shared preference.
   Future<void> fetchTheme() async {
     var prefs = await SharedPreferences.getInstance();
     isDark = prefs.getBool(key) ?? false;
@@ -23,12 +25,14 @@ class ThemeProvider extends ChangeNotifier {
     }
   }
 
+// change app theme and save bool to shared preference.
   Future<void> changeTheme(AppTheme appTheme) async {
     var prefs = await SharedPreferences.getInstance();
-
+    // Check if new theme not equal current theme, and update ui.
     if (appTheme == AppTheme.DarkTheme && _themeData != darkTheme) {
       _themeData = darkTheme;
       isDark = true;
+      // save bool to shared preferene
       await prefs.setBool(key, true);
       notifyListeners();
     } else if (appTheme == AppTheme.LightTheme && _themeData != lightTheme) {

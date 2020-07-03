@@ -35,8 +35,11 @@ class _TasksScreenState extends State<TasksScreen> {
         _isLoading = true;
       });
       await taskProvider.fetchTasks(widget.currentUser.id).then((_) {
-        setState(() => _isLoading = false);
+        setState(() {
+          _isLoading = false;
+        });
       });
+      // listen to any task change
       taskProvider.listenToTasks(widget.currentUser.id);
     }
     _isInit = false;
@@ -63,14 +66,14 @@ class _TasksScreenState extends State<TasksScreen> {
     );
   }
 
+  // loading screen
   Center buildLoadingScreen() => Center(child: CircularProgressIndicator());
 
+  // tasks screen
   Consumer<TasksProvider> buildTasksScreen() {
     return Consumer<TasksProvider>(builder: (context, tasksProvider, ch) {
       if (tasksProvider.tasks == null) {
-        return Center(
-          child: Text('Error'),
-        );
+        return Center(child: Text('Ooops..something wrong, try again later'));
       } else if (tasksProvider.tasks.isEmpty) {
         return buildNoTodoScreen();
       } else {
@@ -79,7 +82,7 @@ class _TasksScreenState extends State<TasksScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                buildHeader(tasksProvider.finishedTasks),
+                buildHeader(tasksProvider.finishedTasksCounter),
                 builTasksList(tasksProvider.tasks),
               ],
             ),
@@ -89,7 +92,7 @@ class _TasksScreenState extends State<TasksScreen> {
     });
   }
 
-  buildNoTodoScreen() {
+  Center buildNoTodoScreen() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -143,6 +146,7 @@ class _TasksScreenState extends State<TasksScreen> {
     );
   }
 
+  // ad new task function
   void addTask(BuildContext context) async {
     showModalBottomSheet(
       context: context,

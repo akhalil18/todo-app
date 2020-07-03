@@ -10,6 +10,10 @@ class AuthProvider with ChangeNotifier {
   var _authService = AuthService();
   String userKey = 'userData';
 
+  /// Implement signIn with google service.
+  /// Create user from returned firebase user.
+  /// Save user to shared preference.
+  /// Return user is success or throw error if fail.
   Future<User> signInWithGoogle() async {
     try {
       final firebaseUser = await _authService.signInWithGoogle();
@@ -19,6 +23,7 @@ class AuthProvider with ChangeNotifier {
         id: firebaseUser.uid,
         photoUrl: firebaseUser.photoUrl,
       );
+      // save user to shared preference
       saveUser(user);
       return user;
     } catch (e) {
@@ -26,6 +31,10 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  /// Implement signIn with facebook service.
+  /// Create user from returned firebase user.
+  /// Save user to shared preference.
+  /// Return user is success or throw error if fail.
   Future<User> signInWithFacebook() async {
     try {
       final firebaseUser = await _authService.loginWithFacebook();
@@ -35,6 +44,7 @@ class AuthProvider with ChangeNotifier {
         id: firebaseUser.uid,
         photoUrl: firebaseUser.photoUrl,
       );
+      // save user to shared preference
       saveUser(user);
       return user;
     } catch (e) {
@@ -42,46 +52,36 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  // Try to auto login.
   Future<User> tryAutoLogIn() async {
     final pref = await SharedPreferences.getInstance();
-    // check user data
+    // Check if user exist
     if (!pref.containsKey(userKey)) {
       return null;
     }
+    // If user exist, return user.
     final extractedData = pref.getString(userKey);
     return User.fromJson(json.decode(extractedData));
   }
 
+  // Save user data to shared preference.
   Future<void> saveUser(User user) async {
     final pref = await SharedPreferences.getInstance();
     pref.setString(userKey, json.encode(user.toJson()));
   }
 
-  // Future<User> signInSiligntly() async {
-  //   final signedInUser = await _authService.signInSiligntly();
-  //   if (signedInUser != null) {
-  //     var user = User(
-  //       displayName: signedInUser.displayName,
-  //       email: signedInUser.email,
-  //       id: signedInUser.id,
-  //       photoUrl: signedInUser.photoUrl,
-  //     );
-  //     currentUser = user;
-  //   }
-  //   return currentUser;
-  // }
-
+  /// Implement sign out service.
+  /// Remove user data from shared preference.
+  /// Return true if signout success, false if fail.
   Future<bool> signOut() async {
     bool out = false;
     bool logout = await _authService.signOut();
-
     if (logout) {
       SharedPreferences pref = await SharedPreferences.getInstance();
       await pref.remove(userKey).then((value) {
         out = value;
       });
     }
-
     return out;
   }
 }

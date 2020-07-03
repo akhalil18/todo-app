@@ -19,43 +19,46 @@ class LoginScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Todo List',
-              style: TextStyle(fontFamily: 'Signatra', fontSize: 80.0),
-            ),
-            SizedBox(height: 10),
-            GestureDetector(
-              onTap: () {
-                signIn(context, LoginType.Google);
-              },
-              child: Container(
-                width: 260.0,
-                height: 60.0,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/google.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 10.0),
-            GestureDetector(
-              onTap: () {
-                signIn(context, LoginType.Facebook);
-              },
-              child: Container(
-                width: 260.0,
-                height: 60.0,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/facebook.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            )
+            buildLogo(),
+            loginButton(
+                context: context,
+                image: 'assets/images/google.png',
+                onTap: () {
+                  signIn(context, LoginType.Google);
+                }),
+            loginButton(
+                context: context,
+                image: 'assets/images/facebook.png',
+                onTap: () {
+                  signIn(context, LoginType.Facebook);
+                }),
           ],
+        ),
+      ),
+    );
+  }
+
+  Text buildLogo() {
+    return Text(
+      'Todo List',
+      style: TextStyle(fontFamily: 'Signatra', fontSize: 80.0),
+    );
+  }
+
+  Padding loginButton({BuildContext context, Function onTap, String image}) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: 260.0,
+          height: 60.0,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(image),
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
       ),
     );
@@ -65,7 +68,7 @@ class LoginScreen extends StatelessWidget {
     final authProvider = context.read<AuthProvider>();
     String error = "Something's wrong, try again later!";
 
-    // try to login
+    // try to login, if login success go to home page
     try {
       final currentUser = (type == LoginType.Facebook)
           ? await authProvider.signInWithFacebook()
@@ -73,7 +76,7 @@ class LoginScreen extends StatelessWidget {
       Navigator.of(context)
           .pushReplacementNamed(TasksScreenRoute, arguments: currentUser);
 
-      // if there is an error
+      // if there is an error, show snackbar with the error message
     } on PlatformException catch (e) {
       // if email is exist
       if (e.code == 'ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL') {

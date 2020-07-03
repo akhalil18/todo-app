@@ -2,11 +2,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+// Auth service class handle autantication requests and return response or error.
+
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final _facebookLogin = FacebookLogin();
 
+  /// Sign in with google.
+  /// create user in firebase if it is not exist.
+  /// Return firebase user.
+  /// Throws an error if fail.
   Future<FirebaseUser> signInWithGoogle() async {
     try {
       final account = await _googleSignIn.signIn();
@@ -15,32 +21,35 @@ class AuthService {
       final AuthCredential credential = GoogleAuthProvider.getCredential(
           idToken: authentication.idToken,
           accessToken: authentication.accessToken);
+      // Sign in to firebase
       final authResult = await _firebaseAuth.signInWithCredential(credential);
-
+      // return firebase user
       return authResult.user;
     } catch (e) {
       throw e;
     }
   }
 
+  /// Login in with facebook.
+  /// create user in firebase if it is not exist.
+  /// Return firebase user.
+  /// Throws an error if fail.
   Future<FirebaseUser> loginWithFacebook() async {
     try {
       final result = await _facebookLogin.logIn(['email']);
       final AuthCredential credential = FacebookAuthProvider.getCredential(
           accessToken: result.accessToken.token);
+      // Sign in to firebase
       final authResult = await _firebaseAuth.signInWithCredential(credential);
-
+      // return firebase user
       return authResult.user;
     } catch (e) {
       throw e;
     }
   }
 
-  Future<GoogleSignInAccount> signInSiligntly() async {
-    final account = await _googleSignIn.signInSilently();
-    return account;
-  }
-
+  /// Signout from google and facebook.
+  /// If success return true else return false.
   Future<bool> signOut() async {
     try {
       await _googleSignIn.signOut();
@@ -51,20 +60,4 @@ class AuthService {
       return false;
     }
   }
-
-  // Future<void> createUserInFirestore(FirebaseUser user) async {
-  //   DocumentSnapshot doc = await userRef.document(user.uid).get();
-  //   // check if the user exists in user collection in database according to their id
-  //   if (!doc.exists) {
-  //     // make new user in fire store
-  //     User currentUser = User(
-  //       displayName: user.displayName,
-  //       email: user.email,
-  //       photoUrl: user.photoUrl,
-  //       id: user.uid,
-  //     );
-
-  //     userRef.document(user.uid).setData(currentUser.toMap());
-  //   }
-  // }
 }

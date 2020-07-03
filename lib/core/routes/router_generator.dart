@@ -5,6 +5,8 @@ import '../../ui/screens/home_page/tasks_screen.dart';
 import '../../ui/screens/splash_screen/splash_screen.dart';
 import 'routing_constants.dart';
 
+// app route class, handle app routing
+
 class RouterGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments;

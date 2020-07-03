@@ -6,7 +6,8 @@ import '../models/task.dart';
 class TasksService {
   final tasksRef = Firestore.instance.collection('tasks');
 
-  // Add new task to firestor
+  /// Add new task to firestor.
+  /// Return true if success and false if fail.
   Future<bool> addTaskToFirestore(String userId, Task task) async {
     try {
       await tasksRef.document(userId).collection('userTasks').add(task.toMap());
@@ -17,7 +18,8 @@ class TasksService {
     }
   }
 
-  // Get all tasks
+  /// Fetch all tasks from firestore.
+  /// Return TasksList.
   Future<List<Task>> fetchAllTasks(String userId) async {
     List<Task> tasksList;
     try {
@@ -36,7 +38,7 @@ class TasksService {
     return tasksList;
   }
 
-  // Tasks stream
+  /// Tasks stream.
   Stream<QuerySnapshot> tasksStream(String userId) {
     return tasksRef
         .document(userId)
@@ -46,7 +48,8 @@ class TasksService {
         .skip(1);
   }
 
-  // update task
+  /// Update task in firestore.
+  /// Return true if success and false if fail.
   Future<bool> updateTask(
       {@required String userId, @required Task updatedTask}) async {
     try {
@@ -66,7 +69,8 @@ class TasksService {
     }
   }
 
-  // delete task
+  /// Delete task from firestore.
+  /// Return true if success and false if fail.
   Future<bool> deleteTask(
       {@required String userId, @required String taskId}) async {
     try {
@@ -86,7 +90,8 @@ class TasksService {
     }
   }
 
-  // handle task statue, finished or not
+  /// Change task statue, finished or not.
+  /// Return true if success and false if fail.
   Future<bool> handleFinishedTask(
       {@required String userId,
       @required String taskId,
