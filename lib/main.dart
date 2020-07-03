@@ -10,6 +10,7 @@ import 'core/routes/routing_constants.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final themeProvider = ThemeProvider();
+  // Get stored theme from sharedPreference befor runnig app.
   await themeProvider.fetchTheme();
 
   runApp(ChangeNotifierProvider.value(
