@@ -1,0 +1,2 @@
+keytool -list -v -keystore D:\projects\current\todo_app\keystore\reales_keystore.jks -alias AndroidDebugKey -storepass abdo187 -keypass abdo187
+keytool -list -v \-alias todo_app -storepass abdo187 -keypass abdo187 -keystore D:\projects\current\todo_app\keystore\reales_keystore

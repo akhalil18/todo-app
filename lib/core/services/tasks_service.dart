@@ -19,7 +19,7 @@ class TasksService {
   }
 
   /// Fetch all tasks from firestore.
-  /// Return TasksList.
+  /// Return Tasks List.
   Future<List<Task>> fetchAllTasks(String userId) async {
     List<Task> tasksList;
     try {
@@ -92,10 +92,11 @@ class TasksService {
 
   /// Change task statue, finished or not.
   /// Return true if success and false if fail.
-  Future<bool> handleFinishedTask(
-      {@required String userId,
-      @required String taskId,
-      @required bool oldStatus}) async {
+  Future<bool> handleFinishedTask({
+    @required String userId,
+    @required String taskId,
+    @required bool oldStatus,
+  }) async {
     bool changedStatue = !oldStatus;
     try {
       final snapshot = await tasksRef

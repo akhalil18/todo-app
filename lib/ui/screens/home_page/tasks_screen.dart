@@ -118,14 +118,11 @@ class _TasksScreenState extends State<TasksScreen> {
         children: <Widget>[
           Text(
             'Completed Tasks',
-            style: TextStyle(
-                color: Colors.green[600],
-                fontSize: 18.0,
-                fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w500),
           ),
           Text(
             finishedTasks,
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w500),
           ),
         ],
       ),

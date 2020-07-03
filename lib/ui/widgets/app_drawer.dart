@@ -122,7 +122,7 @@ class AppDrawer extends StatelessWidget {
       },
       leading: Icon(Icons.exit_to_app),
       title: Text('Log Out'),
-      subtitle: Text('abdo187@gmail.com'),
+      subtitle: Text(currentUser.email),
     );
   }
 }
